@@ -94,6 +94,23 @@ header {
 }
 .fact strong { color: var(--accent-3); }
 
+/* Stimmen & Bewertungen */
+.rating-pill {
+  display: inline-block; margin-bottom: 18px; padding: 9px 16px; border-radius: 999px;
+  background: rgba(0, 210, 168, 0.15); border: 1px solid rgba(0, 210, 168, 0.35);
+  color: var(--accent-3); font-weight: 700; font-size: 0.9rem;
+}
+.reviews { display: flex; flex-direction: column; gap: 14px; }
+.review {
+  background: var(--card); border: 1px solid rgba(255, 255, 255, 0.07);
+  border-left: 3px solid var(--accent-3); border-radius: 12px; padding: 16px 18px;
+}
+.review p { margin: 0 0 8px; color: #e6e7f5; font-style: italic; }
+.review cite { font-style: normal; font-size: 0.85rem; color: var(--muted); }
+.review cite a { color: var(--accent-3); text-decoration: none; }
+.review cite a:hover { text-decoration: underline; }
+.source-note { font-size: 0.8rem; color: var(--muted); margin-top: 14px; }
+
 /* CTA */
 .detail-cta { text-align: center; padding: 30px 0 10px; }
 .detail-cta h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 10px; }
