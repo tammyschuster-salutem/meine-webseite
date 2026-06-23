@@ -50,14 +50,8 @@ export async function onRequestPost(context) {
     }
   }
 
-  // 5) Erfolg zurückgeben (forwarded = ob das Secret zur Laufzeit sichtbar war)
-  // TEMP-DIAGNOSE: envKeys listet die zur Laufzeit verfügbaren Variablennamen (keine Werte)
-  return json({
-    ok: true,
-    message: "Willkommen im Clowder! 🐾",
-    forwarded: Boolean(env.LEAD_WEBHOOK_URL),
-    envKeys: Object.keys(env),
-  });
+  // 5) Erfolg zurückgeben
+  return json({ ok: true, message: "Willkommen im Clowder! 🐾" });
 }
 
 // Hilfsfunktion: JSON-Antwort mit korrektem Header
