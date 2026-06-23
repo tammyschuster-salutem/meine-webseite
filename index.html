@@ -173,6 +173,64 @@
       .hero .stats { animation: fadeUp 0.8s ease 0.45s both; }
       .hero .badge { animation: fadeDown 0.8s ease both, floaty 4s ease-in-out 0.8s infinite; }
     }
+
+    /* ---------- Flip-Karten (Legenden) ---------- */
+    .card.flip {
+      background: transparent;
+      border: none;
+      padding: 0;
+      min-height: 360px;
+      perspective: 1200px;
+      cursor: pointer;
+      position: relative;
+    }
+    .card.flip:hover { transform: translateY(-8px); box-shadow: none; border-color: transparent; }
+    .card.flip:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+    .card.flip .card-inner {
+      position: absolute; inset: 0;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    .card.flip.flipped .card-inner { transform: rotateY(180deg); }
+
+    .card.flip .card-front,
+    .card.flip .card-back {
+      position: absolute; inset: 0;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      overflow: hidden;
+    }
+    .card.flip .card-front {
+      background: var(--card);
+      padding: 28px;
+      display: flex; flex-direction: column;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card.flip:hover .card-front { border-color: rgba(255, 122, 89, 0.6); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35); }
+
+    .card.flip .card-back {
+      transform: rotateY(180deg);
+      background-color: var(--accent-2);
+      background-size: cover; background-position: center;
+      display: flex; align-items: flex-end;
+    }
+    .card.flip .card-back::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(15, 16, 32, 0.92) 8%, rgba(15, 16, 32, 0.3) 65%, rgba(15, 16, 32, 0.05));
+    }
+    .card.flip .card-back-content { position: relative; z-index: 1; padding: 26px; }
+    .card.flip .card-back-content .game { color: var(--accent-3); }
+    .card.flip .card-back-content h3 { font-size: 1.45rem; }
+
+    .flip-hint {
+      margin-top: auto; padding-top: 16px;
+      font-size: 0.8rem; color: var(--muted); opacity: 0.85;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .card.flip:hover .flip-hint { color: var(--accent); }
   </style>
 </head>
 <body>
@@ -222,41 +280,107 @@
           <p>Eine kleine Auswahl aus unserer Hall of Fame — diese Samtpfoten kennt fast jeder Gamer.</p>
         </div>
         <div class="grid">
-          <div class="card">
-            <span class="emoji">⚔️</span>
-            <span class="game">Final Fantasy</span>
-            <h3>Cait Sith</h3>
-            <p>Die wahrsagende Roboterkatze auf dem Moogle — Partymitglied mit Hang zur Dramatik.</p>
+          <div class="card flip" tabindex="0" role="button" aria-pressed="false" aria-label="Cait Sith – Karte umdrehen für Bild">
+            <div class="card-inner">
+              <div class="card-front">
+                <span class="emoji">⚔️</span>
+                <span class="game">Final Fantasy</span>
+                <h3>Cait Sith</h3>
+                <p>Die wahrsagende Roboterkatze auf dem Moogle — Partymitglied mit Hang zur Dramatik.</p>
+                <span class="flip-hint">↻ Klick für Bild</span>
+              </div>
+              <div class="card-back" style="background-image: url('bilder/cait-sith.jpg')">
+                <div class="card-back-content">
+                  <span class="game">Final Fantasy</span>
+                  <h3>Cait Sith</h3>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card">
-            <span class="emoji">🍝</span>
-            <span class="game">The Legend of Zelda</span>
-            <h3>Dorfkatzen</h3>
-            <p>Streichelbar, fischverliebt und überraschend hilfreich beim Finden versteckter Schätze.</p>
+          <div class="card flip" tabindex="0" role="button" aria-pressed="false" aria-label="Dorfkatzen – Karte umdrehen für Bild">
+            <div class="card-inner">
+              <div class="card-front">
+                <span class="emoji">🍝</span>
+                <span class="game">The Legend of Zelda</span>
+                <h3>Dorfkatzen</h3>
+                <p>Streichelbar, fischverliebt und überraschend hilfreich beim Finden versteckter Schätze.</p>
+                <span class="flip-hint">↻ Klick für Bild</span>
+              </div>
+              <div class="card-back" style="background-image: url('bilder/zelda-katze.jpg')">
+                <div class="card-back-content">
+                  <span class="game">The Legend of Zelda</span>
+                  <h3>Dorfkatzen</h3>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card">
-            <span class="emoji">🌃</span>
-            <span class="game">Stray</span>
-            <h3>Die namenlose Katze</h3>
-            <p>Ein ganzes Spiel aus Katzenperspektive — Cyberpunk-Stadt, große Sprünge, viel Schnurren.</p>
+          <div class="card flip" tabindex="0" role="button" aria-pressed="false" aria-label="Die namenlose Katze – Karte umdrehen für Bild">
+            <div class="card-inner">
+              <div class="card-front">
+                <span class="emoji">🌃</span>
+                <span class="game">Stray</span>
+                <h3>Die namenlose Katze</h3>
+                <p>Ein ganzes Spiel aus Katzenperspektive — Cyberpunk-Stadt, große Sprünge, viel Schnurren.</p>
+                <span class="flip-hint">↻ Klick für Bild</span>
+              </div>
+              <div class="card-back" style="background-image: url('bilder/stray-katze.jpg')">
+                <div class="card-back-content">
+                  <span class="game">Stray</span>
+                  <h3>Die namenlose Katze</h3>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card">
-            <span class="emoji">🏝️</span>
-            <span class="game">Animal Crossing</span>
-            <h3>Raymond</h3>
-            <p>Der Kult-Bewohner mit Heterochromie — auf dem Tausch-Markt heiß begehrt.</p>
+          <div class="card flip" tabindex="0" role="button" aria-pressed="false" aria-label="Raymond – Karte umdrehen für Bild">
+            <div class="card-inner">
+              <div class="card-front">
+                <span class="emoji">🏝️</span>
+                <span class="game">Animal Crossing</span>
+                <h3>Raymond</h3>
+                <p>Der Kult-Bewohner mit Heterochromie — auf dem Tausch-Markt heiß begehrt.</p>
+                <span class="flip-hint">↻ Klick für Bild</span>
+              </div>
+              <div class="card-back" style="background-image: url('bilder/raymond.jpg')">
+                <div class="card-back-content">
+                  <span class="game">Animal Crossing</span>
+                  <h3>Raymond</h3>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card">
-            <span class="emoji">😼</span>
-            <span class="game">Super Mario</span>
-            <h3>Katzen-Mario</h3>
-            <p>Mit dem Glöckchen-Power-Up wird Mario selbst zur kletternden, kratzenden Katze.</p>
+          <div class="card flip" tabindex="0" role="button" aria-pressed="false" aria-label="Katzen-Mario – Karte umdrehen für Bild">
+            <div class="card-inner">
+              <div class="card-front">
+                <span class="emoji">😼</span>
+                <span class="game">Super Mario</span>
+                <h3>Katzen-Mario</h3>
+                <p>Mit dem Glöckchen-Power-Up wird Mario selbst zur kletternden, kratzenden Katze.</p>
+                <span class="flip-hint">↻ Klick für Bild</span>
+              </div>
+              <div class="card-back" style="background-image: url('bilder/mario-katze.jpg')">
+                <div class="card-back-content">
+                  <span class="game">Super Mario</span>
+                  <h3>Katzen-Mario</h3>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card">
-            <span class="emoji">🔫</span>
-            <span class="game">The Last of Us / Indies</span>
-            <h3>Begleiter-Katzen</h3>
-            <p>Vom stillen Trostspender bis zum loyalen Sidekick — Katzen machen jede Welt lebendiger.</p>
+          <div class="card flip" tabindex="0" role="button" aria-pressed="false" aria-label="Begleiter-Katzen – Karte umdrehen für Bild">
+            <div class="card-inner">
+              <div class="card-front">
+                <span class="emoji">🔫</span>
+                <span class="game">The Last of Us / Indies</span>
+                <h3>Begleiter-Katzen</h3>
+                <p>Vom stillen Trostspender bis zum loyalen Sidekick — Katzen machen jede Welt lebendiger.</p>
+                <span class="flip-hint">↻ Klick für Bild</span>
+              </div>
+              <div class="card-back" style="background-image: url('bilder/begleiter-katze.jpg')">
+                <div class="card-back-content">
+                  <span class="game">The Last of Us / Indies</span>
+                  <h3>Begleiter-Katzen</h3>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -339,6 +463,21 @@
     } else {
       revealEls.forEach((el) => el.classList.add("visible"));
     }
+
+    // Flip-Karten: Klick oder Enter/Leertaste dreht die Karte um
+    document.querySelectorAll(".card.flip").forEach((card) => {
+      const toggle = () => {
+        card.classList.toggle("flipped");
+        card.setAttribute("aria-pressed", card.classList.contains("flipped"));
+      };
+      card.addEventListener("click", toggle);
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle();
+        }
+      });
+    });
 
     const form = document.getElementById("leadForm");
     const msg = document.getElementById("formMsg");
