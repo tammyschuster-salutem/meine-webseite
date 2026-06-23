@@ -50,8 +50,8 @@ export async function onRequestPost(context) {
     }
   }
 
-  // 5) Erfolg zurückgeben
-  return json({ ok: true, message: "Willkommen im Clowder! 🐾" });
+  // 5) Erfolg zurückgeben (forwarded = ob das Secret zur Laufzeit sichtbar war)
+  return json({ ok: true, message: "Willkommen im Clowder! 🐾", forwarded: Boolean(env.LEAD_WEBHOOK_URL) });
 }
 
 // Hilfsfunktion: JSON-Antwort mit korrektem Header
