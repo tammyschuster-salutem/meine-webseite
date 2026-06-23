@@ -26,9 +26,15 @@
 
     body {
       font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      background: radial-gradient(1200px 600px at 80% -10%, rgba(108, 92, 231, 0.35), transparent 60%),
-                  radial-gradient(900px 500px at -10% 20%, rgba(0, 210, 168, 0.18), transparent 55%),
-                  var(--bg);
+      background:
+        /* Farbige Neon-Glows oben drüber */
+        radial-gradient(1200px 600px at 80% -10%, rgba(108, 92, 231, 0.30), transparent 60%),
+        radial-gradient(900px 500px at -10% 20%, rgba(0, 210, 168, 0.15), transparent 55%),
+        /* Dunkles Overlay, damit der Text lesbar bleibt */
+        linear-gradient(rgba(15, 16, 32, 0.82), rgba(15, 16, 32, 0.90)),
+        /* Das generierte Hintergrundbild */
+        url("hintergrund.jpg") center top / cover no-repeat fixed,
+        var(--bg);
       color: var(--text);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
