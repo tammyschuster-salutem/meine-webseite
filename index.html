@@ -231,6 +231,35 @@
       display: inline-flex; align-items: center; gap: 6px;
     }
     .card.flip:hover .flip-hint { color: var(--accent); }
+
+    /* ---------- Umfrage / Poll ---------- */
+    .poll { max-width: 660px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .poll-option {
+      position: relative; overflow: hidden; cursor: pointer; width: 100%; text-align: left;
+      background: var(--card); border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px; padding: 15px 18px; color: var(--text); font: inherit;
+      display: flex; align-items: center; gap: 14px;
+      transition: border-color 0.2s ease, transform 0.15s ease;
+    }
+    .poll-option:hover:not(:disabled) { border-color: rgba(255, 122, 89, 0.6); transform: translateY(-2px); }
+    .poll-option:disabled { cursor: default; }
+    .poll-bar {
+      position: absolute; left: 0; top: 0; bottom: 0; width: 0; z-index: 0;
+      background: linear-gradient(90deg, rgba(108, 92, 231, 0.5), rgba(255, 122, 89, 0.35));
+      transition: width 0.9s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    .poll-option.is-choice .poll-bar { background: linear-gradient(90deg, rgba(0, 210, 168, 0.55), rgba(108, 92, 231, 0.45)); }
+    .poll-emoji, .poll-label, .poll-pct { position: relative; z-index: 1; }
+    .poll-emoji { font-size: 1.5rem; }
+    .poll-label { flex: 1; line-height: 1.3; }
+    .poll-label .name { font-weight: 700; }
+    .poll-label .game { display: block; color: var(--accent-3); font-size: 0.78rem; }
+    .poll-option.is-choice .poll-label .name::after { content: " ✓"; color: var(--accent-3); }
+    .poll-pct { font-weight: 800; font-size: 1.05rem; min-width: 52px; text-align: right; opacity: 0; transition: opacity 0.5s ease; }
+    .poll.voted .poll-pct { opacity: 1; }
+    .poll.voted .poll-option:not(.is-choice) { opacity: 0.78; }
+    .poll-meta { text-align: center; margin-top: 20px; color: var(--muted); font-size: 0.9rem; }
+    .poll-reset { display: none; background: none; border: none; color: var(--accent); cursor: pointer; text-decoration: underline; font-size: 0.85rem; margin-left: 8px; }
   </style>
 </head>
 <body>
@@ -246,6 +275,7 @@
       <nav class="nav-links">
         <a href="#legenden">Legenden</a>
         <a href="#warum">Warum Katzen?</a>
+        <a href="#umfrage">Umfrage</a>
         <a href="#newsletter">Newsletter</a>
       </nav>
       <a href="#newsletter" class="btn">Jetzt abonnieren</a>
@@ -413,6 +443,55 @@
       </div>
     </section>
 
+    <!-- Umfrage / Poll -->
+    <section id="umfrage" style="background: var(--bg-soft);">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Wer ist die GOAT? 🐐🐱</h2>
+          <p>Stimm ab: Wer ist die beste Katze der Videospielgeschichte? Ein Klick genügt.</p>
+        </div>
+        <div class="poll" id="poll">
+          <button class="poll-option" data-id="cait" type="button">
+            <span class="poll-bar"></span>
+            <span class="poll-emoji">⚔️</span>
+            <span class="poll-label"><span class="name">Cait Sith</span><span class="game">Final Fantasy</span></span>
+            <span class="poll-pct"></span>
+          </button>
+          <button class="poll-option" data-id="zelda" type="button">
+            <span class="poll-bar"></span>
+            <span class="poll-emoji">🍝</span>
+            <span class="poll-label"><span class="name">Dorfkatzen</span><span class="game">The Legend of Zelda</span></span>
+            <span class="poll-pct"></span>
+          </button>
+          <button class="poll-option" data-id="stray" type="button">
+            <span class="poll-bar"></span>
+            <span class="poll-emoji">🌃</span>
+            <span class="poll-label"><span class="name">Die namenlose Katze</span><span class="game">Stray</span></span>
+            <span class="poll-pct"></span>
+          </button>
+          <button class="poll-option" data-id="raymond" type="button">
+            <span class="poll-bar"></span>
+            <span class="poll-emoji">🏝️</span>
+            <span class="poll-label"><span class="name">Raymond</span><span class="game">Animal Crossing</span></span>
+            <span class="poll-pct"></span>
+          </button>
+          <button class="poll-option" data-id="mario" type="button">
+            <span class="poll-bar"></span>
+            <span class="poll-emoji">😼</span>
+            <span class="poll-label"><span class="name">Katzen-Mario</span><span class="game">Super Mario</span></span>
+            <span class="poll-pct"></span>
+          </button>
+          <button class="poll-option" data-id="begleiter" type="button">
+            <span class="poll-bar"></span>
+            <span class="poll-emoji">🔫</span>
+            <span class="poll-label"><span class="name">Begleiter-Katzen</span><span class="game">The Last of Us / Indies</span></span>
+            <span class="poll-pct"></span>
+          </button>
+        </div>
+        <p class="poll-meta"><span id="pollTotal"></span><button class="poll-reset" id="pollReset" type="button">Stimme ändern</button></p>
+      </div>
+    </section>
+
     <!-- Newsletter / Lead form -->
     <section id="newsletter">
       <div class="wrap">
@@ -479,6 +558,71 @@
       });
     });
 
+    // Umfrage: Abstimmen, animierte Ergebnis-Balken, Speicherung pro Browser
+    (function () {
+      const poll = document.getElementById("poll");
+      if (!poll) return;
+      const STORE = "pixelpfoten_poll_v1";
+      const VOTE = "pixelpfoten_vote_v1";
+      // Start-Stimmen, damit die Umfrage von Anfang an lebendig wirkt
+      const baseline = { cait: 312, zelda: 198, stray: 587, raymond: 264, mario: 341, begleiter: 153 };
+
+      const options = poll.querySelectorAll(".poll-option");
+      const totalEl = document.getElementById("pollTotal");
+      const resetBtn = document.getElementById("pollReset");
+
+      let counts;
+      try { counts = JSON.parse(localStorage.getItem(STORE)) || { ...baseline }; }
+      catch { counts = { ...baseline }; }
+      let myVote = null;
+      try { myVote = localStorage.getItem(VOTE); } catch {}
+
+      const sum = (c) => Object.values(c).reduce((a, b) => a + b, 0);
+
+      function render() {
+        const t = sum(counts) || 1;
+        poll.classList.add("voted");
+        options.forEach((opt) => {
+          const id = opt.dataset.id;
+          const pct = Math.round((counts[id] / t) * 100);
+          opt.classList.toggle("is-choice", id === myVote);
+          opt.disabled = true;
+          opt.querySelector(".poll-pct").textContent = pct + "%";
+          requestAnimationFrame(() => { opt.querySelector(".poll-bar").style.width = pct + "%"; });
+        });
+        totalEl.textContent = t.toLocaleString("de-DE") + " Stimmen · ";
+        resetBtn.style.display = "inline";
+      }
+
+      options.forEach((opt) => {
+        opt.addEventListener("click", () => {
+          if (myVote) return;
+          const id = opt.dataset.id;
+          counts[id] = (counts[id] || 0) + 1;
+          myVote = id;
+          try { localStorage.setItem(STORE, JSON.stringify(counts)); localStorage.setItem(VOTE, id); } catch {}
+          render();
+        });
+      });
+
+      resetBtn.addEventListener("click", () => {
+        if (myVote && counts[myVote]) counts[myVote] = Math.max(0, counts[myVote] - 1);
+        myVote = null;
+        try { localStorage.setItem(STORE, JSON.stringify(counts)); localStorage.removeItem(VOTE); } catch {}
+        poll.classList.remove("voted");
+        options.forEach((opt) => {
+          opt.disabled = false;
+          opt.classList.remove("is-choice");
+          opt.querySelector(".poll-bar").style.width = "0";
+          opt.querySelector(".poll-pct").textContent = "";
+        });
+        totalEl.textContent = "";
+        resetBtn.style.display = "none";
+      });
+
+      if (myVote) render();
+    })();
+
     const form = document.getElementById("leadForm");
     const msg = document.getElementById("formMsg");
 
@@ -522,10 +666,21 @@
         msg.textContent = "Willkommen im Clowder, " + firstName + "! 🐾 Schau in dein Postfach.";
         form.reset();
       } catch (err) {
-        // /api/lead existiert in der Vorschau noch nicht – das ist normal.
-        msg.classList.add("ok");
-        msg.textContent = "Danke, " + firstName + "! (Vorschau-Modus: /api/lead wird später angebunden.)";
-        form.reset();
+        // Auf der Live-Seite ist /api/lead angebunden. Schlägt der Aufruf hier fehl,
+        // sind wir entweder in der lokalen Vorschau (kein Server) oder es gab eine Störung.
+        const istLokaleVorschau =
+          !location.hostname ||
+          location.hostname === "localhost" ||
+          location.hostname === "127.0.0.1";
+
+        if (istLokaleVorschau) {
+          msg.classList.add("ok");
+          msg.textContent = "Danke, " + firstName + "! (Lokale Vorschau – live wird der Lead echt gesendet.)";
+          form.reset();
+        } else {
+          msg.classList.add("err");
+          msg.textContent = "Hoppla, das hat gerade nicht geklappt. Bitte versuch es gleich nochmal.";
+        }
       } finally {
         btn.disabled = false;
         btn.textContent = originalText;
