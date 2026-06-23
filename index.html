@@ -112,7 +112,9 @@
       background: var(--card); border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: var(--radius); padding: 28px; transition: transform 0.2s ease, border-color 0.2s ease;
     }
-    .card:hover { transform: translateY(-6px); border-color: rgba(255, 122, 89, 0.5); }
+    .card:hover { transform: translateY(-8px); border-color: rgba(255, 122, 89, 0.6); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 122, 89, 0.15); }
+    .card .emoji { transition: transform 0.25s ease; }
+    .card:hover .emoji { transform: scale(1.18) rotate(-6deg); }
     .card .emoji { font-size: 2.6rem; margin-bottom: 14px; display: block; }
     .card h3 { font-size: 1.25rem; margin-bottom: 8px; }
     .card .game { color: var(--accent-3); font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; display: block; }
@@ -144,9 +146,42 @@
     /* ---------- Footer ---------- */
     footer { padding: 40px 0; text-align: center; color: var(--muted); border-top: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.9rem; }
     footer .logo { justify-content: center; margin-bottom: 12px; }
+
+    /* ---------- Animierter Hintergrund-Glow ---------- */
+    main { position: relative; z-index: 1; }
+    .bg-glow { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .bg-glow span { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.45; }
+    .bg-glow .g1 { width: 460px; height: 460px; background: var(--accent-2); top: -140px; left: -90px; animation: drift1 18s ease-in-out infinite; }
+    .bg-glow .g2 { width: 380px; height: 380px; background: var(--accent-3); bottom: -120px; right: -70px; animation: drift2 22s ease-in-out infinite; }
+    .bg-glow .g3 { width: 320px; height: 320px; background: var(--accent); top: 38%; right: 18%; animation: drift1 26s ease-in-out infinite reverse; }
+
+    @keyframes drift1 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(45px, 35px) scale(1.18); } }
+    @keyframes drift2 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-55px, -35px) scale(1.12); } }
+
+    /* ---------- Scroll-Reveal & Auftritts-Animationen ---------- */
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: none; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+    @keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+      .reveal.visible { opacity: 1; transform: none; }
+
+      .hero h1 { animation: fadeDown 0.8s ease both; }
+      .hero p.lead { animation: fadeUp 0.8s ease 0.15s both; }
+      .hero .hero-cta { animation: fadeUp 0.8s ease 0.30s both; }
+      .hero .stats { animation: fadeUp 0.8s ease 0.45s both; }
+      .hero .badge { animation: fadeDown 0.8s ease both, floaty 4s ease-in-out 0.8s infinite; }
+    }
   </style>
 </head>
 <body>
+  <div class="bg-glow" aria-hidden="true">
+    <span class="g1"></span>
+    <span class="g2"></span>
+    <span class="g3"></span>
+  </div>
+
   <header>
     <div class="wrap nav">
       <div class="logo"><span class="paw">🐾</span> Pixel Pfoten</div>
@@ -280,6 +315,31 @@
   </footer>
 
   <script>
+    // Scroll-Reveal: Elemente sanft einblenden, sobald sie in den Blick kommen
+    const revealEls = document.querySelectorAll(".card, .section-head, .signup");
+    revealEls.forEach((el) => el.classList.add("reveal"));
+
+    // Karten innerhalb eines Grids gestaffelt einblenden
+    document.querySelectorAll(".grid").forEach((grid) => {
+      grid.querySelectorAll(".card").forEach((card, i) => {
+        card.style.transitionDelay = (i * 0.08) + "s";
+      });
+    });
+
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      revealEls.forEach((el) => io.observe(el));
+    } else {
+      revealEls.forEach((el) => el.classList.add("visible"));
+    }
+
     const form = document.getElementById("leadForm");
     const msg = document.getElementById("formMsg");
 
