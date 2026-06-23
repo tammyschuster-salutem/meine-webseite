@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pixel Pfoten · Katzen in Videospielen</title>
+  <meta name="description" content="Die ultimative Hommage an die legendärsten Katzen der Videospielgeschichte. Hol dir den Newsletter mit den besten Katzen-Momenten aus Games." />
+  <style>
+    :root {
+      --bg: #0f1020;
+      --bg-soft: #181a35;
+      --card: #1f2147;
+      --accent: #ff7a59;
+      --accent-2: #6c5ce7;
+      --accent-3: #00d2a8;
+      --text: #f4f4fb;
+      --muted: #a9abce;
+      --radius: 18px;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      --maxw: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(108, 92, 231, 0.35), transparent 60%),
+                  radial-gradient(900px 500px at -10% 20%, rgba(0, 210, 168, 0.18), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+    /* ---------- Nav ---------- */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(15, 16, 32, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 70px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.15rem; letter-spacing: 0.3px; }
+    .logo .paw { font-size: 1.5rem; }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .btn {
+      display: inline-block; cursor: pointer; border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff; font-weight: 700; padding: 12px 22px;
+      border-radius: 999px; text-decoration: none; font-size: 0.95rem;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 24px rgba(255, 122, 89, 0.35);
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255, 122, 89, 0.5); }
+    @media (max-width: 720px) { .nav-links { display: none; } }
+
+    /* ---------- Hero ---------- */
+    .hero { padding: 90px 0 70px; text-align: center; }
+    .badge {
+      display: inline-block; padding: 7px 16px; border-radius: 999px;
+      background: rgba(108, 92, 231, 0.18); color: #cfc7ff;
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px;
+      border: 1px solid rgba(108, 92, 231, 0.4); margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem); line-height: 1.05; font-weight: 900;
+      letter-spacing: -1px; margin-bottom: 22px;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p.lead { font-size: clamp(1.05rem, 2.2vw, 1.3rem); color: var(--muted); max-width: 640px; margin: 0 auto 36px; }
+    .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-ghost {
+      background: transparent; box-shadow: none;
+      border: 1px solid rgba(255, 255, 255, 0.18); color: var(--text);
+    }
+    .btn-ghost:hover { box-shadow: none; background: rgba(255, 255, 255, 0.05); }
+
+    /* ---------- Stats ---------- */
+    .stats { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; margin-top: 56px; }
+    .stat { text-align: center; }
+    .stat .num {
+      font-size: 2.2rem; font-weight: 900;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .stat .label { color: var(--muted); font-size: 0.9rem; }
+
+    /* ---------- Section ---------- */
+    section { padding: 80px 0; }
+    .section-head { text-align: center; max-width: 620px; margin: 0 auto 50px; }
+    .section-head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.5px; margin-bottom: 14px; }
+    .section-head p { color: var(--muted); font-size: 1.05rem; }
+
+    /* ---------- Cat cards ---------- */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+    .card {
+      background: var(--card); border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--radius); padding: 28px; transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .card:hover { transform: translateY(-6px); border-color: rgba(255, 122, 89, 0.5); }
+    .card .emoji { font-size: 2.6rem; margin-bottom: 14px; display: block; }
+    .card h3 { font-size: 1.25rem; margin-bottom: 8px; }
+    .card .game { color: var(--accent-3); font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; display: block; }
+    .card p { color: var(--muted); font-size: 0.95rem; }
+
+    /* ---------- Lead form ---------- */
+    .signup {
+      background: linear-gradient(135deg, rgba(108, 92, 231, 0.25), rgba(255, 122, 89, 0.15));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px; padding: 56px 32px; text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .signup h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 12px; }
+    .signup p { color: var(--muted); max-width: 480px; margin: 0 auto 30px; }
+    form.lead-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; max-width: 560px; margin: 0 auto; }
+    .lead-form input {
+      flex: 1 1 200px; min-width: 180px; padding: 14px 18px; border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(15, 16, 32, 0.6);
+      color: var(--text); font-size: 1rem; outline: none; transition: border-color 0.2s;
+    }
+    .lead-form input:focus { border-color: var(--accent); }
+    .lead-form input::placeholder { color: #7d7fa6; }
+    .lead-form button { flex: 0 0 auto; }
+    .form-note { font-size: 0.82rem; color: var(--muted); margin-top: 16px; }
+    .form-msg { margin-top: 18px; font-weight: 600; min-height: 24px; }
+    .form-msg.ok { color: var(--accent-3); }
+    .form-msg.err { color: var(--accent); }
+
+    /* ---------- Footer ---------- */
+    footer { padding: 40px 0; text-align: center; color: var(--muted); border-top: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.9rem; }
+    footer .logo { justify-content: center; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="logo"><span class="paw">🐾</span> Pixel Pfoten</div>
+      <nav class="nav-links">
+        <a href="#legenden">Legenden</a>
+        <a href="#warum">Warum Katzen?</a>
+        <a href="#newsletter">Newsletter</a>
+      </nav>
+      <a href="#newsletter" class="btn">Jetzt abonnieren</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap">
+        <span class="badge">🎮 Die Hall of Fame der Game-Katzen</span>
+        <h1>Die legendärsten <span class="grad">Katzen in Videospielen</span></h1>
+        <p class="lead">Von pixeligen Begleitern bis zu epischen Bossen: Wir feiern die Samtpfoten, die Gaming-Geschichte geschrieben haben. Hol dir die besten Katzen-Momente direkt in dein Postfach.</p>
+        <div class="hero-cta">
+          <a href="#newsletter" class="btn">Newsletter holen</a>
+          <a href="#legenden" class="btn btn-ghost">Die Legenden ansehen</a>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="num">120+</div><div class="label">kuratierte Game-Katzen</div></div>
+          <div class="stat"><div class="num">40 J.</div><div class="label">Gaming-Geschichte</div></div>
+          <div class="stat"><div class="num">9</div><div class="label">Leben pro Newsletter</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cat legends -->
+    <section id="legenden">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Die Katzen-Legenden</h2>
+          <p>Eine kleine Auswahl aus unserer Hall of Fame — diese Samtpfoten kennt fast jeder Gamer.</p>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <span class="emoji">⚔️</span>
+            <span class="game">Final Fantasy</span>
+            <h3>Cait Sith</h3>
+            <p>Die wahrsagende Roboterkatze auf dem Moogle — Partymitglied mit Hang zur Dramatik.</p>
+          </div>
+          <div class="card">
+            <span class="emoji">🍝</span>
+            <span class="game">The Legend of Zelda</span>
+            <h3>Dorfkatzen</h3>
+            <p>Streichelbar, fischverliebt und überraschend hilfreich beim Finden versteckter Schätze.</p>
+          </div>
+          <div class="card">
+            <span class="emoji">🌃</span>
+            <span class="game">Stray</span>
+            <h3>Die namenlose Katze</h3>
+            <p>Ein ganzes Spiel aus Katzenperspektive — Cyberpunk-Stadt, große Sprünge, viel Schnurren.</p>
+          </div>
+          <div class="card">
+            <span class="emoji">🏝️</span>
+            <span class="game">Animal Crossing</span>
+            <h3>Raymond</h3>
+            <p>Der Kult-Bewohner mit Heterochromie — auf dem Tausch-Markt heiß begehrt.</p>
+          </div>
+          <div class="card">
+            <span class="emoji">😼</span>
+            <span class="game">Super Mario</span>
+            <h3>Katzen-Mario</h3>
+            <p>Mit dem Glöckchen-Power-Up wird Mario selbst zur kletternden, kratzenden Katze.</p>
+          </div>
+          <div class="card">
+            <span class="emoji">🔫</span>
+            <span class="game">The Last of Us / Indies</span>
+            <h3>Begleiter-Katzen</h3>
+            <p>Vom stillen Trostspender bis zum loyalen Sidekick — Katzen machen jede Welt lebendiger.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why cats -->
+    <section id="warum" style="background: var(--bg-soft);">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Warum Katzen Games besser machen</h2>
+          <p>Es ist kein Zufall, dass Samtpfoten in immer mehr Spielen auftauchen.</p>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <span class="emoji">❤️</span>
+            <h3>Sofortige Bindung</h3>
+            <p>Eine Katze im Spiel erzeugt in Sekunden emotionale Nähe — ganz ohne Dialog.</p>
+          </div>
+          <div class="card">
+            <span class="emoji">🎭</span>
+            <h3>Charakter & Witz</h3>
+            <p>Eigensinnig, verspielt, geheimnisvoll: Katzen geben jeder Story Persönlichkeit.</p>
+          </div>
+          <div class="card">
+            <span class="emoji">🧭</span>
+            <h3>Frische Perspektive</h3>
+            <p>Spiele wie „Stray" zeigen, wie eine Katzenperspektive komplett neues Gameplay schafft.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter / Lead form -->
+    <section id="newsletter">
+      <div class="wrap">
+        <div class="signup">
+          <h2>Werde Teil des Clowders 🐱</h2>
+          <p>Jede Woche eine neue Game-Katze, kuratierte Screenshots und versteckte Easter Eggs. Kostenlos, jederzeit kündbar.</p>
+          <form class="lead-form" id="leadForm" novalidate>
+            <input type="text" id="firstName" name="firstName" placeholder="Dein Vorname" autocomplete="given-name" required />
+            <input type="email" id="email" name="email" placeholder="deine@email.de" autocomplete="email" required />
+            <button type="submit" class="btn">Anmelden</button>
+          </form>
+          <div class="form-msg" id="formMsg" role="status" aria-live="polite"></div>
+          <p class="form-note">Wir senden dir nur Katzen-Content. Kein Spam. 🐾</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="logo"><span class="paw">🐾</span> Pixel Pfoten</div>
+      <p>© 2026 Pixel Pfoten · Eine Hommage an die Katzen der Videospielwelt.</p>
+    </div>
+  </footer>
+
+  <script>
+    const form = document.getElementById("leadForm");
+    const msg = document.getElementById("formMsg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const firstName = document.getElementById("firstName").value.trim();
+      const email = document.getElementById("email").value.trim();
+
+      msg.className = "form-msg";
+      msg.textContent = "";
+
+      // Einfache Validierung
+      if (!firstName) {
+        msg.classList.add("err");
+        msg.textContent = "Bitte gib deinen Vornamen ein.";
+        return;
+      }
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!emailOk) {
+        msg.classList.add("err");
+        msg.textContent = "Bitte gib eine gültige E-Mail-Adresse ein.";
+        return;
+      }
+
+      const btn = form.querySelector("button");
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "Senden …";
+
+      try {
+        // Sendet den Lead später an dein Backend
+        const res = await fetch("/api/lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ firstName, email }),
+        });
+
+        if (!res.ok) throw new Error("Server-Fehler");
+
+        msg.classList.add("ok");
+        msg.textContent = "Willkommen im Clowder, " + firstName + "! 🐾 Schau in dein Postfach.";
+        form.reset();
+      } catch (err) {
+        // /api/lead existiert in der Vorschau noch nicht – das ist normal.
+        msg.classList.add("ok");
+        msg.textContent = "Danke, " + firstName + "! (Vorschau-Modus: /api/lead wird später angebunden.)";
+        form.reset();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    });
+  </script>
+</body>
+</html>
