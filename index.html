@@ -224,6 +224,15 @@
     .card.flip .card-back-content { position: relative; z-index: 1; padding: 26px; }
     .card.flip .card-back-content .game { color: var(--accent-3); }
     .card.flip .card-back-content h3 { font-size: 1.45rem; }
+    .card-more {
+      position: relative; z-index: 1; display: inline-block; margin-top: 14px;
+      padding: 9px 18px; border-radius: 999px; font-size: 0.85rem; font-weight: 700;
+      color: #fff; text-decoration: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 8px 20px rgba(255, 122, 89, 0.4);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+    }
+    .card-more:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(255, 122, 89, 0.55); }
 
     .flip-hint {
       margin-top: auto; padding-top: 16px;
@@ -323,6 +332,7 @@
                 <div class="card-back-content">
                   <span class="game">Final Fantasy</span>
                   <h3>Cait Sith</h3>
+                  <a class="card-more" href="/katze/cait-sith/">Mehr erfahren →</a>
                 </div>
               </div>
             </div>
@@ -340,6 +350,7 @@
                 <div class="card-back-content">
                   <span class="game">The Legend of Zelda</span>
                   <h3>Dorfkatzen</h3>
+                  <a class="card-more" href="/katze/zelda-dorfkatzen/">Mehr erfahren →</a>
                 </div>
               </div>
             </div>
@@ -357,6 +368,7 @@
                 <div class="card-back-content">
                   <span class="game">Stray</span>
                   <h3>Die namenlose Katze</h3>
+                  <a class="card-more" href="/katze/stray/">Mehr erfahren →</a>
                 </div>
               </div>
             </div>
@@ -374,6 +386,7 @@
                 <div class="card-back-content">
                   <span class="game">Animal Crossing</span>
                   <h3>Raymond</h3>
+                  <a class="card-more" href="/katze/raymond/">Mehr erfahren →</a>
                 </div>
               </div>
             </div>
@@ -391,6 +404,7 @@
                 <div class="card-back-content">
                   <span class="game">Super Mario</span>
                   <h3>Katzen-Mario</h3>
+                  <a class="card-more" href="/katze/mario/">Mehr erfahren →</a>
                 </div>
               </div>
             </div>
@@ -408,6 +422,7 @@
                 <div class="card-back-content">
                   <span class="game">The Last of Us / Indies</span>
                   <h3>Begleiter-Katzen</h3>
+                  <a class="card-more" href="/katze/begleiter-katzen/">Mehr erfahren →</a>
                 </div>
               </div>
             </div>
@@ -549,7 +564,10 @@
         card.classList.toggle("flipped");
         card.setAttribute("aria-pressed", card.classList.contains("flipped"));
       };
-      card.addEventListener("click", toggle);
+      card.addEventListener("click", (e) => {
+        if (e.target.closest("a")) return; // Links (z. B. "Mehr erfahren") nicht als Flip abfangen
+        toggle();
+      });
       card.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
