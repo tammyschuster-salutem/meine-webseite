@@ -5,6 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pixel Pfoten · Katzen in Videospielen</title>
   <meta name="description" content="Die ultimative Hommage an die legendärsten Katzen der Videospielgeschichte. Hol dir den Newsletter mit den besten Katzen-Momenten aus Games." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Social-Vorschau (Open Graph & Twitter) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://meine-webseite-bh4.pages.dev/" />
+  <meta property="og:title" content="Pixel Pfoten · Katzen in Videospielen" />
+  <meta property="og:description" content="Die legendärsten Katzen der Videospielgeschichte – jede Woche neu im kostenlosen Newsletter." />
+  <meta property="og:image" content="https://meine-webseite-bh4.pages.dev/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="de_DE" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Pixel Pfoten · Katzen in Videospielen" />
+  <meta name="twitter:description" content="Die legendärsten Game-Katzen – jede Woche neu im Newsletter." />
+  <meta name="twitter:image" content="https://meine-webseite-bh4.pages.dev/og-image.jpg" />
+
   <style>
     :root {
       --bg: #0f1020;
@@ -139,6 +157,12 @@
     .lead-form input::placeholder { color: #7d7fa6; }
     .lead-form button { flex: 0 0 auto; }
     .form-note { font-size: 0.82rem; color: var(--muted); margin-top: 16px; }
+    .lead-consent {
+      flex: 1 1 100%; display: flex; align-items: flex-start; justify-content: center;
+      gap: 8px; font-size: 0.82rem; color: var(--muted); margin-top: 4px; text-align: left;
+    }
+    .lead-consent input { width: 16px; height: 16px; margin-top: 2px; accent-color: var(--accent); flex: 0 0 auto; cursor: pointer; }
+    .lead-consent a { color: var(--accent-3); }
     .form-msg { margin-top: 18px; font-weight: 600; min-height: 24px; }
     .form-msg.ok { color: var(--accent-3); }
     .form-msg.err { color: var(--accent); }
@@ -146,6 +170,9 @@
     /* ---------- Footer ---------- */
     footer { padding: 40px 0; text-align: center; color: var(--muted); border-top: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.9rem; }
     footer .logo { justify-content: center; margin-bottom: 12px; }
+    .footer-links { margin-top: 10px; }
+    .footer-links a { color: var(--muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--text); text-decoration: underline; }
 
     /* ---------- Animierter Hintergrund-Glow ---------- */
     main { position: relative; z-index: 1; }
@@ -517,6 +544,10 @@
             <input type="text" id="firstName" name="firstName" placeholder="Dein Vorname" autocomplete="given-name" required />
             <input type="email" id="email" name="email" placeholder="deine@email.de" autocomplete="email" required />
             <button type="submit" class="btn">Anmelden</button>
+            <label class="lead-consent">
+              <input type="checkbox" id="consent" />
+              <span>Ich stimme der <a href="/datenschutz/">Datenschutzerklärung</a> zu und möchte den Newsletter erhalten.</span>
+            </label>
           </form>
           <div class="form-msg" id="formMsg" role="status" aria-live="polite"></div>
           <p class="form-note">Wir senden dir nur Katzen-Content. Kein Spam. 🐾</p>
@@ -529,6 +560,7 @@
     <div class="wrap">
       <div class="logo"><span class="paw">🐾</span> Pixel Pfoten</div>
       <p>© 2026 Pixel Pfoten · Eine Hommage an die Katzen der Videospielwelt.</p>
+      <p class="footer-links"><a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a></p>
     </div>
   </footer>
 
@@ -662,6 +694,12 @@
       if (!emailOk) {
         msg.classList.add("err");
         msg.textContent = "Bitte gib eine gültige E-Mail-Adresse ein.";
+        return;
+      }
+      const consent = document.getElementById("consent");
+      if (consent && !consent.checked) {
+        msg.classList.add("err");
+        msg.textContent = "Bitte stimme der Datenschutzerklärung zu.";
         return;
       }
 
